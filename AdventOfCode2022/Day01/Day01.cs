@@ -1,4 +1,5 @@
 ﻿using AdventOfCode.Framework;
+using BenchmarkDotNet.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,18 +23,17 @@ namespace AdventOfCode2022
 
         protected override string? Problem1()
         {
-            var groups = Input.Raw.Split("\r\n\r\n");
-            var convertedGroups = groups.Select(g => g.Split('\n').Select(x => int.Parse(x)).ToArray()).ToArray();
             int max = 0;
-            int groupIndex = 0;
-            for (int i = 0; i < convertedGroups.Length; i++)
+            foreach (var group in Input.Raw.Split("\r\n\r\n"))
             {
-                var group = convertedGroups[i];
-                var sum = group.Sum();
-                if (sum > max)
+                int sum = 0;
+                foreach (var groupItem in group.Split("\r\n"))
+                {
+                    sum += int.Parse(groupItem);
+                }
+                if(sum > max)
                 {
                     max = sum;
-                    groupIndex = i;
                 }
             }
             return max.ToString();
@@ -41,20 +41,25 @@ namespace AdventOfCode2022
 
         protected override string? Problem2()
         {
-            var groups = Input.Raw.Split("\r\n\r\n");
-            var convertedGroups = groups.Select(g => g.Split('\n').Select(x => int.Parse(x)).ToArray()).ToArray();
             int[] maxes = new int[3];
             int min = 0;
             int minIndex = 0;
-            for (int i = 0; i < convertedGroups.Length; i++)
+            int sum = 0;
+            foreach (var group in Input.Raw.SplitFast("\r\n"))
             {
-                var group = convertedGroups[i];
-                var sum = group.Sum();
-                if (sum > min)
+                if (group.Length == 0)
                 {
-                    maxes[minIndex] = sum;
-                    min = maxes.Min();
-                    minIndex = Array.IndexOf(maxes, min);
+                    if (sum > min)
+                    {
+                        maxes[minIndex] = sum;
+                        min = maxes.Min();
+                        minIndex = Array.IndexOf(maxes, min);
+                    }
+                    sum = 0;
+                }
+                else
+                {
+                    sum += int.Parse(group);
                 }
             }
             return maxes.Sum().ToString();

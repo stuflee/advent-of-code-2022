@@ -20,67 +20,68 @@ namespace AdventOfCode2022
         {
         }
 
-        private enum SelectedItem
+        internal enum SelectedItem : int
         {
             Rock = 1,
             Paper = 2,
             Scissors = 3
         }
 
-        private SelectedItem OpponentMoveToInteger(char opponentMove)
+        internal static bool Beats(SelectedItem first, SelectedItem second)
         {
-            switch(opponentMove)
+            if (first == second)
             {
-                case 'A': 
-                    return SelectedItem.Rock;
-                case 'B':
-                    return SelectedItem.Paper;
-                case 'C':
-                    return SelectedItem.Scissors;
-                default:
-                    throw new NotImplementedException();
+                return false;
             }
+            if (((int)first % 3) - (int)second != -1)
+            {
+                return true;
+            }
+            return false;
         }
 
-        private SelectedItem MyMoveToInteger(char myMove)
+        private SelectedItem ParseOpponentMove(char opponentMove)
         {
-            switch (myMove)
+            return opponentMove switch
             {
-                case 'X':
-                    return SelectedItem.Rock;
-                case 'Y':
-                    return SelectedItem.Paper;
-                case 'Z':
-                    return SelectedItem.Scissors;
-                default:
-                    throw new NotImplementedException();
-            }
+                'A' => SelectedItem.Rock,
+                'B' => SelectedItem.Paper,
+                'C' => SelectedItem.Scissors,
+                _ => throw new ArgumentException()
+            };
         }
 
-        private int MyMoveToScore(char myMove)
+        private SelectedItem ParseMyMove(char myMove)
         {
-            switch (myMove)
+            return myMove switch
             {
-                case 'X':
-                    return 0;
-                case 'Y':
-                    return 3;
-                case 'Z':
-                    return 6;
-                default:
-                    throw new NotImplementedException();
-            }
+                'X' => SelectedItem.Rock,
+                'Y' => SelectedItem.Paper,
+                'Z' => SelectedItem.Scissors,
+                _ => throw new ArgumentException()
+            };
         }
 
+        private int ParseMyScore(char myMove)
+        {
+            return myMove switch
+            {
+                'X' => 0,
+                'Y' => 3,
+                'Z' => 6,
+                _ => throw new ArgumentException()
+            };
+        }
+
+        //12855
+        //13726
         private int ScoreRound(SelectedItem theirTurn, SelectedItem myTurn)
         {
             if (theirTurn == myTurn)
             {
                 return 3 + (int)myTurn;
             }
-            if (theirTurn == SelectedItem.Rock && myTurn == SelectedItem.Paper 
-                || theirTurn == SelectedItem.Paper && myTurn == SelectedItem.Scissors
-                || theirTurn == SelectedItem.Scissors && myTurn == SelectedItem.Rock)
+            if (Beats(myTurn, theirTurn))
             {
                 return 6 + (int)myTurn;
             }
@@ -130,30 +131,43 @@ namespace AdventOfCode2022
 
         protected override string? Problem1()
         {
-            var rounds = Input
-                .Raw
-                .Split("\r\n")
-                .Select(s =>
+            int sum = 0;
+            foreach(var round in Input.Raw.SplitFast("\r\n"))
+            {
+                var roundCells = round.SplitFast(" ");
+                if (roundCells.MoveNext())
                 {
-                    var roundCells = s.Split(' ');
-                    return (OpponentMoveToInteger(roundCells[0][0]), MyMoveToInteger(roundCells[1][0]));
-                });
-
-            return rounds.Select(r => ScoreRound(r.Item1, r.Item2)).Sum().ToString();
+                    SelectedItem opponentMove = ParseOpponentMove(roundCells.Current[0]);
+                    SelectedItem myMove;
+                    if (roundCells.MoveNext())
+                    {
+                        myMove = ParseMyMove(roundCells.Current[0]);
+                        sum += ScoreRound(opponentMove, myMove);
+                    }
+                }
+            }
+            return sum.ToString();
         }
 
         protected override string? Problem2()
         {
-            var rounds = Input
-                .Raw
-                .Split("\r\n")
-                .Select(s =>
+            int sum = 0;
+            foreach (var round in Input.Raw.SplitFast("\r\n"))
+            {
+                var roundCells = round.SplitFast(" ");
+                if (roundCells.MoveNext())
                 {
-                    var roundCells = s.Split(' ');
-                    return (OpponentMoveToInteger(roundCells[0][0]), MyMoveToScore(roundCells[1][0]));
-                });
-
-            return rounds.Select(r => ScoreRound(r.Item1, ComputeTurnGivenScore(r.Item1, r.Item2))).Sum().ToString();
+                    SelectedItem opponentMove = ParseOpponentMove(roundCells.Current[0]);
+                    int myScore;
+                    if (roundCells.MoveNext())
+                    {
+                        myScore = ParseMyScore(roundCells.Current[0]);
+                        var myMove = ComputeTurnGivenScore(opponentMove, myScore);
+                        sum += ScoreRound(opponentMove, myMove);
+                    }
+                }
+            }
+            return sum.ToString();
         }
     }
 }
