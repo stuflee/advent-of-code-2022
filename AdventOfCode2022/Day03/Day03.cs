@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022
+namespace AdventOfCode2022.Day03
 {
     [Solution(3)]
 #if RELEASE
@@ -24,11 +24,11 @@ namespace AdventOfCode2022
         {
             if (itemCode >= 'a' && itemCode <= 'z')
             {
-                return (int)(itemCode - 'a') + 1;
+                return itemCode - 'a' + 1;
             }
             else if (itemCode >= 'A' && itemCode <= 'Z')
             {
-                return (int)(itemCode - 'A') + 27;
+                return itemCode - 'A' + 27;
             }
             else throw new NotImplementedException();
         }
@@ -67,11 +67,11 @@ namespace AdventOfCode2022
                 .ToList();
 
             int sum = 0;
-            for (int i=0; i<ruckSacks.Count; i+=3)
+            for (int i = 0; i < ruckSacks.Count; i += 3)
             {
                 var first = ruckSacks[i];
-                var second = ruckSacks[i+1];
-                var third = ruckSacks[i+2];
+                var second = ruckSacks[i + 1];
+                var third = ruckSacks[i + 2];
 
                 foreach (var item in third)
                 {

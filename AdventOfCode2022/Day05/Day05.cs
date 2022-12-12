@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022
+namespace AdventOfCode2022.Day05
 {
     [Solution(5)]
 #if RELEASE
@@ -19,7 +19,7 @@ namespace AdventOfCode2022
         public Day05(Input input) : base(input)
         {
         }
-      
+
         private record Move
         {
             public Move(int fromStack, int toStack, int count)
@@ -39,7 +39,7 @@ namespace AdventOfCode2022
             private List<Stack<char>> stacks = new List<Stack<char>>();
             public Crates(int numberOfStacks)
             {
-                for (int i=0; i<numberOfStacks; i++)
+                for (int i = 0; i < numberOfStacks; i++)
                 {
                     stacks.Add(new Stack<char>());
                 }
@@ -71,18 +71,18 @@ namespace AdventOfCode2022
                 var copies = stacks.Select(s => new Stack<char>(s.ToArray().Reverse())).ToArray();
                 var output = new StringBuilder();
 
-                for (int i= maxStackSize; i>0; i--)
+                for (int i = maxStackSize; i > 0; i--)
                 {
                     foreach (var stack in copies)
                     {
                         var item = stack.Count == i
                             ? $"[{stack.Pop()}] " : "    ";
-                        
+
                         output.Append(item);
                     }
                     output.Append(Environment.NewLine);
                 }
-                for (int i=0; i<copies.Length; i++)
+                for (int i = 0; i < copies.Length; i++)
                 {
                     output.Append($" {i}  ");
                 }
@@ -98,11 +98,11 @@ namespace AdventOfCode2022
             var finalRow = crateRows[crateRows.Length - 1];
             var numberOfCrates = finalRow.Split(' ', StringSplitOptions.RemoveEmptyEntries).Count();
             var cratesDefinition = new Crates(numberOfCrates);
-            for (int i = crateRows.Length - 2; i >=0; i--)
+            for (int i = crateRows.Length - 2; i >= 0; i--)
             {
                 var row = crateRows[i];
                 var crateIndex = 1;
-                for (int j=1; j<row.Length; j+=4)
+                for (int j = 1; j < row.Length; j += 4)
                 {
                     var item = row[j];
                     if (row[j] != ' ')
@@ -124,7 +124,7 @@ namespace AdventOfCode2022
 
             foreach (var move in parsedMoves)
             {
-                for (int i=0; i<move.Count; i++)
+                for (int i = 0; i < move.Count; i++)
                 {
                     cratesDefinition.Add(move.ToStack, cratesDefinition.Remove(move.FromStack));
                 }
@@ -173,7 +173,7 @@ namespace AdventOfCode2022
                 {
                     buffer[i] = cratesDefinition.Remove(move.FromStack);
                 }
-                for (int i = move.Count - 1; i >= 0 ; i--)
+                for (int i = move.Count - 1; i >= 0; i--)
                 {
                     cratesDefinition.Add(move.ToStack, buffer[i]);
                 }

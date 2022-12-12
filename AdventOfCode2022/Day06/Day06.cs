@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022
+namespace AdventOfCode2022.Day06
 {
     [Solution(6)]
 #if RELEASE
@@ -23,7 +23,7 @@ namespace AdventOfCode2022
         public Day06(Input input) : base(input)
         {
         }
-      
+
 
         protected override string? Problem1()
         {
@@ -31,7 +31,7 @@ namespace AdventOfCode2022
 
             var input = text.AsSpan();
             var set = new HashSet<char>(4);
-            for (int i=0; i<input.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
                 var thisWindow = input.Slice(i, 4);
                 set.Clear();

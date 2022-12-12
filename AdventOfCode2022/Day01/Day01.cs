@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022
+namespace AdventOfCode2022.Day01
 {
     [Solution(1)]
 #if RELEASE
@@ -31,7 +31,7 @@ namespace AdventOfCode2022
                 {
                     sum += int.Parse(groupItem);
                 }
-                if(sum > max)
+                if (sum > max)
                 {
                     max = sum;
                 }

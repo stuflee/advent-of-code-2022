@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022
+namespace AdventOfCode2022.Day04
 {
     [Solution(4)]
 #if RELEASE
@@ -25,7 +25,8 @@ namespace AdventOfCode2022
             var pairs = Input
                 .Raw
                 .Split("\r\n")
-                .Select(x => {
+                .Select(x =>
+                {
                     var y = x.Split(',');
                     var firstRange = y[0].Split('-');
                     var secondRange = y[1].Split('-');
@@ -33,14 +34,14 @@ namespace AdventOfCode2022
                     return (
                         (int.Parse(firstRange[0]), int.Parse(firstRange[1])),
                         (int.Parse(secondRange[0]), int.Parse(secondRange[1])));
-                    })
+                })
                 .ToList();
 
             int count = 0;
             foreach (var pair in pairs)
             {
-                if ((pair.Item1.Item1 <= pair.Item2.Item1 && pair.Item1.Item2 >= pair.Item2.Item2)
-                    || (pair.Item1.Item1 >= pair.Item2.Item1 && pair.Item1.Item2 <= pair.Item2.Item2))
+                if (pair.Item1.Item1 <= pair.Item2.Item1 && pair.Item1.Item2 >= pair.Item2.Item2
+                    || pair.Item1.Item1 >= pair.Item2.Item1 && pair.Item1.Item2 <= pair.Item2.Item2)
                 {
                     count++;
                 }
@@ -53,7 +54,8 @@ namespace AdventOfCode2022
             var pairs = Input
                 .Raw
                 .Split("\r\n")
-                .Select(x => {
+                .Select(x =>
+                {
                     var y = x.Split(',');
                     var firstRange = y[0].Split('-');
                     var secondRange = y[1].Split('-');
@@ -68,10 +70,10 @@ namespace AdventOfCode2022
             foreach (var pair in pairs)
             {
                 if (
-                    (pair.Item1.Item1 <= pair.Item2.Item1 && pair.Item1.Item2 >= pair.Item2.Item1)
-                    || (pair.Item1.Item1 <= pair.Item2.Item2 && pair.Item1.Item2 >= pair.Item2.Item2)
-                    || (pair.Item2.Item1 <= pair.Item1.Item1 && pair.Item2.Item2 >= pair.Item1.Item1)
-                    || (pair.Item2.Item1 <= pair.Item1.Item2 && pair.Item2.Item2 >= pair.Item1.Item2)
+                    pair.Item1.Item1 <= pair.Item2.Item1 && pair.Item1.Item2 >= pair.Item2.Item1
+                    || pair.Item1.Item1 <= pair.Item2.Item2 && pair.Item1.Item2 >= pair.Item2.Item2
+                    || pair.Item2.Item1 <= pair.Item1.Item1 && pair.Item2.Item2 >= pair.Item1.Item1
+                    || pair.Item2.Item1 <= pair.Item1.Item2 && pair.Item2.Item2 >= pair.Item1.Item2
                     )
                 {
                     count++;

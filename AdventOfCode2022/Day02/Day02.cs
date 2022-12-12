@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022
+namespace AdventOfCode2022.Day02
 {
     [Solution(2)]
 #if RELEASE
@@ -33,7 +33,7 @@ namespace AdventOfCode2022
             {
                 return false;
             }
-            if (((int)first % 3) - (int)second != -1)
+            if ((int)first % 3 - (int)second != -1)
             {
                 return true;
             }
@@ -132,7 +132,7 @@ namespace AdventOfCode2022
         protected override string? Problem1()
         {
             int sum = 0;
-            foreach(var round in Input.Raw.SplitFast("\r\n"))
+            foreach (var round in Input.Raw.SplitFast("\r\n"))
             {
                 var roundCells = round.SplitFast(" ");
                 if (roundCells.MoveNext())

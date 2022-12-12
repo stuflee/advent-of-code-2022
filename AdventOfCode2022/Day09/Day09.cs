@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace AdventOfCode2022.Day07
+namespace AdventOfCode2022.Day09
 {
     [Solution(9)]
 #if RELEASE
@@ -163,7 +163,7 @@ namespace AdventOfCode2022.Day07
             {
                 Width = width;
                 Height = height;
-                for (int i=1; i<length; i++)
+                for (int i = 1; i < length; i++)
                 {
                     TailPositions.Add(new Position());
                 }
@@ -179,7 +179,7 @@ namespace AdventOfCode2022.Day07
             private HashSet<Position> VisitedPositions = new HashSet<Position>() { new Position() };
 
             public int VisitedCount => VisitedPositions.Count();
-            
+
             private void AdjustPositions()
             {
                 var referencePosition = HeadPosition;
@@ -220,7 +220,7 @@ namespace AdventOfCode2022.Day07
                 {
                     return tail;
                 }
-                return head with { X = head.X + xOffset, Y = head.Y + yOffset};
+                return head with { X = head.X + xOffset, Y = head.Y + yOffset };
             }
 
             public void MoveUp()

@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace AdventOfCode2022.Day07
+namespace AdventOfCode2022.Day08
 {
     [Solution(8)]
 #if RELEASE
@@ -62,17 +62,17 @@ namespace AdventOfCode2022.Day07
 
 
             //For each row
-            for (int i=1; i<numberOfRows - 1; i++)
+            for (int i = 1; i < numberOfRows - 1; i++)
             {
                 int invertedI = numberOfRows - 1 - i;
 
                 char biggestTreeFromLeftFromTop = rows[i][0];
                 char biggestTreeFromRightFromTop = rows[i][numberOfColumns - 1];
-                char biggestTreeFromLeftFromBottom  = rows[invertedI][0];
+                char biggestTreeFromLeftFromBottom = rows[invertedI][0];
                 char biggestTreeFromRightFromBottom = rows[invertedI][numberOfColumns - 1];
                 visible[i][0] = true;
                 visible[i][numberOfColumns - 1] = true;
-                for (int j=1; j<numberOfColumns-1; j++)
+                for (int j = 1; j < numberOfColumns - 1; j++)
                 {
                     //Correct loop order going top left to bottom right.
                     //
@@ -119,9 +119,9 @@ namespace AdventOfCode2022.Day07
                 scenicScore.Add(new long[rowAsArray.Length]);
             }
 
-            for (int i=0; i<rows.Count; i++)
+            for (int i = 0; i < rows.Count; i++)
             {
-                for (int j=0; j < rows[i].Length; j++)
+                for (int j = 0; j < rows[i].Length; j++)
                 {
                     scenicScore[i][j] = ComputeScenicScore(i, j, rows);
                 }
@@ -133,13 +133,13 @@ namespace AdventOfCode2022.Day07
         {
             var treeHeight = treeHeights[row][column];
 
-            if (row == 0 || column == 0 || row == treeHeights.Count - 1 || column == treeHeights[0].Length - 1 )
+            if (row == 0 || column == 0 || row == treeHeights.Count - 1 || column == treeHeights[0].Length - 1)
             {
                 return 0;
             }
 
             int viewLeft = 1;
-            int viewRight= 1;
+            int viewRight = 1;
             int viewUp = 1;
             int viewDown = 1;
 
