@@ -1,5 +1,6 @@
 ﻿using AdventOfCode.Framework;
 using Microsoft.CodeAnalysis;
+using Microsoft.Diagnostics.Tracing.Parsers.Clr;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Numerics;
@@ -62,8 +63,6 @@ namespace AdventOfCode2022.Day10
 
         public class ParameterlessOperation : BaseOperation
         {
-            public Operand Operand { get; init; }
-
             public override void Perform(WorryValueBase worryValue)
             {
                 switch (Operand)
@@ -137,44 +136,41 @@ namespace AdventOfCode2022.Day10
 
         public class WorryValueComplex : WorryValueBase
         {
-            public Dictionary<long, long> FactorsAndModulo = new Dictionary<long, long>();
+            public (long, long)[] FactorsAndModulo;
             public WorryValueComplex(long value, List<long> allFactors) 
             {
-                foreach (var factor in allFactors)
-                {
-                    FactorsAndModulo.Add(factor, value % factor);
-                }
+                FactorsAndModulo = allFactors.Select(f => (f, value % f)).ToArray();
             }
 
             public override bool IsDivisibleBy(long divisor)
             {
-                return FactorsAndModulo[divisor] == 0;
+                return FactorsAndModulo.Where(f => f.Item1 == divisor).First().Item2 == 0;
             }
 
             public override void Multiply(long value)
             {
-                var factors = FactorsAndModulo.Keys.ToList();
-                foreach (var factor in factors)
+                for (int i=0; i<FactorsAndModulo.Length; i++)
                 {
-                    FactorsAndModulo[factor] = (FactorsAndModulo[factor] * value) % factor; 
+                    (var divisor, var oldValue) = FactorsAndModulo[i];
+                    FactorsAndModulo[i] = (divisor, (oldValue * value) % divisor);
                 }
             }
 
             public override void Square()
             {
-                var factors = FactorsAndModulo.Keys.ToList();
-                foreach (var factor in factors)
+                for (int i = 0; i < FactorsAndModulo.Length; i++)
                 {
-                    FactorsAndModulo[factor] = (FactorsAndModulo[factor] * FactorsAndModulo[factor]) % factor;
+                    (var divisor, var oldValue) = FactorsAndModulo[i];
+                    FactorsAndModulo[i] = (divisor, (oldValue * oldValue) % divisor);
                 }
             }
 
             public override void Add(long value)
             {
-                var factors = FactorsAndModulo.Keys.ToList();
-                foreach (var factor in factors)
+                for (int i = 0; i < FactorsAndModulo.Length; i++)
                 {
-                    FactorsAndModulo[factor] = (FactorsAndModulo[factor] + value) % factor;
+                    (var divisor, var oldValue) = FactorsAndModulo[i];
+                    FactorsAndModulo[i] = (divisor, (oldValue + value) % divisor);
                 }
             }
 
