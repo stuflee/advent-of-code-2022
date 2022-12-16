@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022.Day01
+namespace AdventOfCode2022.Day12
 {
     [Solution(12)]
 #if RELEASE
@@ -46,9 +46,9 @@ namespace AdventOfCode2022.Day01
             bool exitFound = false;
             Location startLocation = new Location();
             Location endLocation = new Location();
-            for (int i=0; i<grid.Count; i++) //Rows
+            for (int i = 0; i < grid.Count; i++) //Rows
             {
-                for (int j=0; j < grid[i].Length; j++) //Columns
+                for (int j = 0; j < grid[i].Length; j++) //Columns
                 {
                     if (grid[i][j] == 'S')
                     {
@@ -76,7 +76,7 @@ namespace AdventOfCode2022.Day01
                 foreach (var location in locations)
                 {
                     //Try Up
-                    if (location.Row - 1 >= 0 
+                    if (location.Row - 1 >= 0
                         && grid[location.Row - 1][location.Column] <= grid[location.Row][location.Column] + 1)
                     {
                         var proposedLocation = location with { Row = location.Row - 1 };

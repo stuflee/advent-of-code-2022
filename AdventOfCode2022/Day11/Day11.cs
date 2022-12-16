@@ -8,7 +8,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using static AdventOfCode2022.Day02.Day02;
 
-namespace AdventOfCode2022.Day10
+namespace AdventOfCode2022.Day11
 {
     [Solution(11)]
 #if RELEASE
@@ -56,7 +56,7 @@ namespace AdventOfCode2022.Day10
                             LogToConsole($"    Worry level is increased by {OtherValue} to {worryValue}.");
                             break;
                         }
-                    default:throw new NotImplementedException();
+                    default: throw new NotImplementedException();
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace AdventOfCode2022.Day10
         {
             public long Value;
 
-            public WorryValueSimple(long value) 
+            public WorryValueSimple(long value)
             {
                 Value = value;
             }
@@ -137,7 +137,7 @@ namespace AdventOfCode2022.Day10
         public class WorryValueComplex : WorryValueBase
         {
             public (long, long)[] FactorsAndModulo;
-            public WorryValueComplex(long value, List<long> allFactors) 
+            public WorryValueComplex(long value, List<long> allFactors)
             {
                 FactorsAndModulo = allFactors.Select(f => (f, value % f)).ToArray();
             }
@@ -149,10 +149,10 @@ namespace AdventOfCode2022.Day10
 
             public override void Multiply(long value)
             {
-                for (int i=0; i<FactorsAndModulo.Length; i++)
+                for (int i = 0; i < FactorsAndModulo.Length; i++)
                 {
                     (var divisor, var oldValue) = FactorsAndModulo[i];
-                    FactorsAndModulo[i] = (divisor, (oldValue * value) % divisor);
+                    FactorsAndModulo[i] = (divisor, oldValue * value % divisor);
                 }
             }
 
@@ -161,7 +161,7 @@ namespace AdventOfCode2022.Day10
                 for (int i = 0; i < FactorsAndModulo.Length; i++)
                 {
                     (var divisor, var oldValue) = FactorsAndModulo[i];
-                    FactorsAndModulo[i] = (divisor, (oldValue * oldValue) % divisor);
+                    FactorsAndModulo[i] = (divisor, oldValue * oldValue % divisor);
                 }
             }
 
@@ -181,7 +181,7 @@ namespace AdventOfCode2022.Day10
         }
 
 
-        public class Monkey 
+        public class Monkey
         {
             public int Number { get; init; }
 
@@ -199,14 +199,14 @@ namespace AdventOfCode2022.Day10
         }
 
         private Monkey ParseMonkey<T>(ReadOnlySpan<char> text, Func<long, T> WorryCreator) where T : WorryValueBase
-        { 
+        {
             var textEnumerator = text.SplitFast("\r\n");
             textEnumerator.MoveNext();
-            
+
             //There are less than 10 monkies so we don't need length
             var monkeyIndex = int.Parse(textEnumerator.Current.Slice(7, 1));
             textEnumerator.MoveNext();
-            
+
             var startingItemsList = textEnumerator.Current.Slice("  Starting items: ".Length);
             List<T> items = new List<T>();
             foreach (var item in startingItemsList.SplitFast(", "))
@@ -216,22 +216,22 @@ namespace AdventOfCode2022.Day10
 
             textEnumerator.MoveNext();
             var operation = textEnumerator.Current.Slice("  Operation: new = ".Length);
-            
+
             textEnumerator.MoveNext();
             var testValue = int.Parse(textEnumerator.Current.Slice("  Test: divisible by ".Length));
-            
+
             textEnumerator.MoveNext();
             var monkeyIfTrue = int.Parse(textEnumerator.Current.Slice("    If true: throw to monkey ".Length));
 
             textEnumerator.MoveNext();
             var monkeyIfFalse = int.Parse(textEnumerator.Current.Slice("    If false: throw to monkey ".Length));
 
-            var operand = MemoryExtensions.Equals(operation.Slice("old ".Length, 1), "*", StringComparison.CurrentCultureIgnoreCase)
+            var operand = operation.Slice("old ".Length, 1).Equals("*", StringComparison.CurrentCultureIgnoreCase)
                 ? Operand.Multiply : Operand.Add;
 
             BaseOperation thisMonkeyOperation;
-            if (MemoryExtensions.Equals(operation.Slice(0, 3), "old", StringComparison.CurrentCultureIgnoreCase)
-                && MemoryExtensions.Equals(operation.Slice(operation.Length - 3), "old", StringComparison.CurrentCultureIgnoreCase))
+            if (operation.Slice(0, 3).Equals("old", StringComparison.CurrentCultureIgnoreCase)
+                && operation.Slice(operation.Length - 3).Equals("old", StringComparison.CurrentCultureIgnoreCase))
             {
                 thisMonkeyOperation = new ParameterlessOperation()
                 {
@@ -274,7 +274,7 @@ namespace AdventOfCode2022.Day10
                 monkies.Add(monkey);
             }
 
-            for (int i=0; i<20; i++)
+            for (int i = 0; i < 20; i++)
             {
                 foreach (var monkey in monkies)
                 {
@@ -282,7 +282,7 @@ namespace AdventOfCode2022.Day10
                     while (monkey.Items.Count > 0)
                     {
                         var item = monkey.Items.Dequeue();
-                        
+
                         monkey.InspectionCount = monkey.InspectionCount + 1;
 
                         LogToConsole($"  Monkey inspects and item with a worry level of {item}.");

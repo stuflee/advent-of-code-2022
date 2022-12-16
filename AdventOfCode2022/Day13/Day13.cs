@@ -10,9 +10,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using static AdventOfCode2022.Day01.Day13;
+using static AdventOfCode2022.Day13.Day13;
 
-namespace AdventOfCode2022.Day01
+namespace AdventOfCode2022.Day13
 {
     [Solution(13)]
 #if RELEASE
@@ -145,7 +145,7 @@ namespace AdventOfCode2022.Day01
             {
                 StringBuilder s = new();
                 s.Append("[");
-                for (int i=0; i<Elements.Count; i++)
+                for (int i = 0; i < Elements.Count; i++)
                 {
                     if (i != 0)
                     {
