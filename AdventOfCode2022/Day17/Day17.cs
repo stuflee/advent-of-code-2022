@@ -385,7 +385,6 @@ namespace AdventOfCode2022.Day17
 
         protected override string? Problem2()
         {
-            //long numberOfShapes = 2022;
             long numberOfShapes = 1000000000000;
             int minAllowedX = 0;
             int maxAllowedX = 6;
