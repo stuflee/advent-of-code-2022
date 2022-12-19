@@ -398,8 +398,8 @@ namespace AdventOfCode2022.Day17
             var shapeFactory = new ShapeFactory();
             var jetFactory = new JetFactory(Parse(Input.Raw));
             var trackedDataByShapeAndDirectionIndexes = new Dictionary<(int, int), TrackedData>();
-            var rowCountToAssertByShapeIndex = new Dictionary<long, long>();
             var trackedIndex = (-1, -1);
+
             for (long i = 0; i < numberOfShapes; i++)
             {
                 var newRows = PruneRows(rows);
