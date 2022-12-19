@@ -435,16 +435,11 @@ namespace AdventOfCode2022.Day17
                     var rowDifference = (rows.Count + rowsRemoved + 1) - trackedData.numberOfRows;
                     var shapeDifference = i - trackedData.shapeNumber;
 
-                    while (i + 1000 * trackedData.shapeDifference < numberOfShapes - 1)
-                    {
-                        i = i + 1000 * trackedData.shapeDifference;
-                        rowsRemoved = rowsRemoved + 1000 * trackedData.rowsDifference;
-                    }
-                    while (i + trackedData.shapeDifference < numberOfShapes - 1)
-                    {
-                        i = i + trackedData.shapeDifference;
-                        rowsRemoved = rowsRemoved + trackedData.rowsDifference;
-                    }
+                    var targetI = numberOfShapes - 1;
+                    var shapesToAdd = (targetI - i) / shapeDifference;
+
+                    rowsRemoved = rowsRemoved + shapesToAdd * trackedData.rowsDifference;
+                    i = i + shapesToAdd * shapeDifference;
                 }
 
                 bool shapeAtRest = false;
