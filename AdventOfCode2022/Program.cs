@@ -3,5 +3,5 @@ using AdventOfCode.Framework;
 using AdventOfCode2022;
 
 SolutionRunner runner = new();
-runner.Solve(15);
+runner.Solve(17);
 
