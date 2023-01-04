@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static AdventOfCode2022.Day13.Day13;
 
-namespace AdventOfCode2022.Day17
+namespace AdventOfCode2022.Day18
 {
     [Solution(18)]
 #if RELEASE
@@ -39,7 +39,7 @@ namespace AdventOfCode2022.Day17
         }
 
         public record CubeFace(int xStart, int xEnd, int yStart, int yEnd, int zStart, int zEnd);
-        
+
 
         public record Cube(int x, int y, int z)
         {
@@ -238,7 +238,7 @@ namespace AdventOfCode2022.Day17
 
             var cubeSet = new HashSet<Cube>(cubes);
             var facesEnclosed = 0;
-            for (int x=minx; x<=maxx; x++)
+            for (int x = minx; x <= maxx; x++)
             {
                 for (int y = miny; y <= maxy; y++)
                 {
