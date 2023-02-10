@@ -8,7 +8,7 @@ using System.Management;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 
-namespace AdventOfCode2022.Day19
+namespace AdventOfCode2022.Day22
 {
     [Solution(22)]
 #if RELEASE
@@ -28,14 +28,6 @@ namespace AdventOfCode2022.Day19
 #if DEBUG
             Console.WriteLine(item.ToString());
 #endif
-        }
-
-        private enum Direction
-        {
-            Right = 0,
-            Down = 1,
-            Left = 2,
-            Up = 3,
         }
 
         private int ParseNumber(ref ReadOnlySpan<char> text)
@@ -65,19 +57,9 @@ namespace AdventOfCode2022.Day19
             }
         }
 
-        private record struct Vector(int x, int y)
-        {
-            public Vector Add(Vector v)
-            {
-                return this with { x = this.x + v.x, y = this.y + v.y };
-            }
-        }
-
-        private record struct Position(Vector v, Direction d);
-
         private abstract class Instruction
         {
-            public abstract Position Apply(Position initialPosition, List<char[]> markers);
+            public abstract Position Apply(Position initialPosition, INavigatable landscape);
         }
 
         private class RotationInstruction : Instruction
@@ -89,8 +71,9 @@ namespace AdventOfCode2022.Day19
 
             public Direction Rotation { get; }
 
-            public override Position Apply(Position initialPosition, List<char[]> markers)
+            public override Position Apply(Position initialPosition, INavigatable landscape)
             {
+                //This action is independent of the landscape.
                 if (Rotation == Direction.Left)
                 {
                     return RotateLeft(initialPosition);
@@ -149,68 +132,9 @@ namespace AdventOfCode2022.Day19
 
             public int Distance { get; }
 
-            public override Position Apply(Position initialPosition, List<char[]> markers)
+            public override Position Apply(Position initialPosition, INavigatable landscape)
             {
-                Vector movementVector;
-                switch (initialPosition.d)
-                {
-                    case Direction.Up:
-                        movementVector = new(0, -1);
-                        break;
-                    case Direction.Down:
-                        movementVector = new(0, 1);
-                        break;
-                    case Direction.Left:
-                        movementVector = new(-1, 0);
-                        break;
-                    case Direction.Right:
-                        movementVector = new( 1, 0);
-                        break;
-                    default:
-                        throw new Exception();
-                }
-
-                int positionMoved = 0;
-                Vector lastValidPosition = initialPosition.v;
-                Vector lastPosition = lastValidPosition;
-                while (positionMoved < Distance)
-                {
-                    var nextProposedPosition = lastPosition.Add(movementVector);
-                    if (nextProposedPosition.y < 0)
-                    {
-                        nextProposedPosition = nextProposedPosition with { y = markers.Count - 1 };
-                    }
-                    if (nextProposedPosition.y > markers.Count - 1)
-                    {
-                        nextProposedPosition = nextProposedPosition with { y = 0 };
-                    }
-                    if (nextProposedPosition.x < 0)
-                    {
-                        nextProposedPosition = nextProposedPosition with { x = markers[0].Length - 1 };
-                    }
-                    if (nextProposedPosition.x > markers[0].Length - 1)
-                    {
-                        nextProposedPosition = nextProposedPosition with { x = 0 };
-                    }
-                    var row = markers[nextProposedPosition.y];
-                    var coordinateValue = ' ';
-                    if (nextProposedPosition.x < row.Length)
-                    {
-                        coordinateValue = row[nextProposedPosition.x];
-                    }
-                    
-                    if (coordinateValue == '.')
-                    {
-                        positionMoved += 1;
-                        lastValidPosition = nextProposedPosition;
-                    }
-                    else if (coordinateValue == '#')
-                    {
-                        break;
-                    }
-                    lastPosition = nextProposedPosition;
-                }
-                return initialPosition with { v = lastValidPosition };
+                return landscape.Move(initialPosition, Distance);
             }
 
             public override string ToString()
@@ -255,6 +179,7 @@ namespace AdventOfCode2022.Day19
             var inputComponents = input.Split("\r\n\r\n");
 
             var markers = ParseMarkers(inputComponents[0]);
+            var landscape = new Landscape(markers);
             var instructions = ParseInstructions(inputComponents[1]);
 
             var topRow = markers[0];
@@ -268,7 +193,7 @@ namespace AdventOfCode2022.Day19
             foreach (var instruction in instructions)
             {
                 //Console.WriteLine($"Applying {instruction} to {position}");
-                var newPosition = instruction.Apply(position, markers);
+                var newPosition = instruction.Apply(position, landscape);
                 //Console.WriteLine($"New Position  {newPosition}");
                 position = newPosition;
             }
